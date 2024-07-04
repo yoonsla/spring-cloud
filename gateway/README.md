@@ -1,4 +1,4 @@
-# Spring CLoud Gateway 란?
+# Spring Cloud Gateway 란?
 
 ## 개요
 
