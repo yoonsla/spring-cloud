@@ -108,4 +108,4 @@ spring:
 - WebApplicationType.REACTIVE → spring-boot-starter-webflux 의존성을 가지면 해당 타입
 - WebApplicationType.NONE → 둘 다 의존성이 존재하지 않는다면 NONE 타입
 
-=> Spring Cloud Gateway는 webflux 타입
+=> Spring Cloud Gateway는 webflux 의존성을 가지는 REACTIVE 타입
