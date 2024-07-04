@@ -2,7 +2,7 @@ spring:
   application:
     name: sy
   profiles:
-    active: dev
+    active: kr-dev
   config:
     import: optional:configserver:http://localhost:8888
 

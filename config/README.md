@@ -20,7 +20,7 @@ Spring Cloud config는 설정 서버와 설정 클라이언트로 나뉜다.
 - 속성 값 암호화 및 암호 해독(대칭 또는 비대칭)
 - ``@EnableConfigServer``를 사용하여 쉽게 Spring Boot 애플리케이션에 포함할 수 있다.
 
-### Config Client (Spring 애플리케이션용)
+### Spring Cloud Config Client (Spring 애플리케이션용)
 - Config Server에 바인딩하고 Environment원격 속성 소스로 Spring을 초기화한다.
 - 속성 값 암호화 및 암호 해독(대칭 또는 비대칭)
 
@@ -78,6 +78,7 @@ ex)
 
 ```
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-config-server'
 }
@@ -138,3 +139,67 @@ public class ConfigServerApplication {
 ---
 
 ## Spring Cloud Config Client 구축
+
+### 클라이언트 서버 구축
+
+Spring Cloud Config Client 실행을 위해서는 아래의 의존성이 필요하다.
+
+```
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+```
+
+```
+@Setter
+@Getter
+@ConfigurationProperties("com.sy")
+@RefreshScope
+@ToString
+public class MyConfig {
+
+    private String profile;
+    private String region;
+}
+```
+
+- ``@RefreshScope`` : 설정 정보가 바뀌면 다시 불러올 수 있도록 도와준다.\
+Git 주소에 있는 설정 파일을 수정했을 경우 /actuator/refresh 엔드포인트를 호출하면 변경된 설정 값이 반영된다.
+
+application.yml
+```
+spring:
+  application:
+    name: sy
+  profiles:
+    active: kr-dev
+  config:
+    import: optional:configserver:http://localhost:8888
+```
+
+config server 와 통신에 실패했을 때 에러를 던지고, 서버 실행을 멈추고 싶다면 ``optional:`` 부분을 제거한다.
+
+```
+@RestController
+@RequiredArgsConstructor
+public class ConfigController {
+
+    private final MyConfig myConfig;
+
+    @GetMapping("/config")
+    public ResponseEntity<String> config() {
+        System.out.println(myConfig);
+        return ResponseEntity.ok(myConfig.toString());
+    }
+}
+```
+
+---
