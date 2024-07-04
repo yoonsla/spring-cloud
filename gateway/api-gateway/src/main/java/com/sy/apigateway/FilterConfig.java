@@ -20,6 +20,13 @@ public class FilterConfig extends RouteLocatorBuilder {
                 .uri("http://localhost:8081"))
             .route(predicate -> predicate.path("/second-service/**")
                 .uri("http://localhost:8082"))
+            .route(predicate ->
+                predicate.path("/third-service/**")
+                    .filters(filter ->
+                        filter.addRequestHeader("third-header-request", "third-header-request")
+                            .addResponseHeader("third-header-response", "third-header-response"))
+                    .uri("http://localhost:8083")
+            )
             .build();
     }
 }
