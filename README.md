@@ -37,21 +37,21 @@
 
 ---
 
-## 역할
+### 역할
 
-### Spring Cloud Config
+#### Spring Cloud Config
 
 중앙 집중식으로 애플리케이션의 설정 정보를 관리할 수 있도록 하는 프레임워크이다.\
 이를 통해 애플리케이션의 설정 정보를 쉽게 수정하고 배포할 수 있다.\
 Config 서버는 Git, Subversion, Vault 등 다양한 백엔드를 지원하며,
 애플리케이션의 환경마다 다른 설정 정보를 저장하고 관리할 수 있다.
 
-### Spring Cloud Gateway
+#### Spring Cloud Gateway
 
 API 게이트웨이는 클라이언트의 요청을 받아서 애플리케이션으로 전달하고 애플리케이션의 응답을 클라이언트에 반환한다.\
 Gateway를 사용하면 여러 개의 서비스를 하나의 엔드포인트로 노출하거나 라우팅, 필터링, 트래픽 제어 등을 수행할 수 있다.
 
-### Spring Cloud Discovery
+#### Spring Cloud Discovery
 
 서비스 인스턴스의 위차와 상태를 추적하고 클라이언트가 서비스 인스턴스를 검색할 수 있다.\
 이를 위해 Discovery 클라이언트는 Eureka, Consul, Zookeeper 등 다양한 백엔드를 지원하며, 서비스 인스턴스의 상태를 추적하고\

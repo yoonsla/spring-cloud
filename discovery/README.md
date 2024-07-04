@@ -17,7 +17,8 @@ Service Client가 서비스를 호출 할 때, 서비스의 위치 (IP, PORT 등
 - Eureka는 미들웨어 기능을 하기 위해 각 연결된 서비스의 IP / PORT / InstanceId를 가지고 있으며 REST 기반으로 작동한다.
 - Eureka는 Client-Server 방식으로 Eureka Server에 등록된 서비스는 Eureka Client로 불린다.
 
-![img.png](discovery/img.png)
+
+![img.png](img.png)
 
 각 서비스를 Eureka Server에 등록하면 Eureka Server는 각 Eureka Client의 IP / PORT / InstanceId를 저장하고 
 이후 Eureka Client가 다른 Eureka Client에 요청을 보낼 때 Eureka에서 받아온 정보를 가지고 요청할 수 있다.
@@ -115,11 +116,11 @@ user service 애플리케이션이 기동 될 때 discovery service 에 해당 �
 - Status 가 UP 일 경우 정상 실행 상태, DOWN 일 경우 비정상 상태
 - 등록 된 서버는 Status 에 {IP주소}:{Service 이름}:{포트 번호} 형식으로 확인 가능
 
-![img.png](img.png)
+![img.png](img2.png)
 
 ---
 ### Eureka REST
 
-![img_1.png](discovery/img_1.png)
+![img_1.png](img3.png)
 
 
