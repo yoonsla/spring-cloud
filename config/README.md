@@ -203,3 +203,41 @@ public class ConfigController {
 ```
 
 ---
+
+## Spring Cloud Config 설정 파일 내용 갱신하는 방법
+
+스프링 클라우드를 통해 깃 주소에서 관리하는 설정 파일에 변경이 필요할 수 있다.\
+그러나 별도의 설정 없이는 설정 파일이 변경되어도 변경 사항이 client에 반영되지 않는다.\
+이는 Spring Cloud Config Server 부하를 줄이도록 애플리케이션을 실행 시점에 1번만 설정 정보를 읽고 로컬에 캐싱하기 때문이다.
+
+때문에 설정이 자동 갱신되도록 하기 위해서는 아래 3가지 방법을 사용할 수 있다.
+- spring cloud client 서버들에 actuator API 호출해주기
+- spring cloud bus 를 사용해 이벤트 전파하기
+- watcher 를 통해 spring cloud server 에 변경 여부를 확인하기
+
+### Spring Cloud Client 서버들에 actuator API 호출해주기
+
+가장 심플한 방법이다.\
+클라이언트에 spring-boot-actuator 의존성을 추가하고 ``POST`` 로 ``/actuator/refresh`` 요청을 보낸다.\
+그러면 actuator 가 설정 정보를 다시 읽고 값을 refresh 한다.\
+
+간단한 방법이지만 운영 중인 서버가 여러대라면 상당히 번거로워질 수 있다.\
+특히나 Spring Cloud Eureka 와 같이 서비스 디스커버리 기술을 사용하고 있지 않다면 더더욱 적용이 어려워진다.
+
+### Spring Cloud Bus 를 사용해 이벤트 전파하기
+
+Spring Cloud bus 는 서비스 노드를 연결해 설정 정보 등의 변경을 전파하기 위한 경량화 메시지 브로커이다.\
+기본적으로 AMQP 메시지 브로커로 사용한다.\
+
+이는 효율적인 방법이지만 관리해야 하는 서버가 늘어난다는 부담이 존재한다.
+
+### Watcher 를 통해 Spring Cloud Sever 에 변경 여부를 확인하기
+
+Watcher 는 설정 서버에 변경 여부를 지속적으로 물어보고 확인하는 컴포넌트이다.\
+일반적으로 설정 서버는 별다른 일을 하지 않도록 분리되어 있어 요청에 대한 부담이 적다.\
+
+하지만 Git으로 설정 파일을 관리하는 경우, Spring Cloud Config에서 제공하는 Watcher로는 변경 감지가 불가하다.\
+설정 서버는 설정 클라이언트에게 state 와 version 을 내려주는데, Git은 version 이 git HEAD 의 checksum 에 해당한다.\
+하지만 Spring Cloud Config 가 구현해둔 ConfigCloudWatcher 는 state 의 변경 여부만 검사하기 때문에, Git은 변경 여부 탐지가 불가하다.
+
+이는 ConfigWatcher 를 참고해 version 의 수정 여부를 검사하는 구현체를 만들어 해결할 수 있다.
