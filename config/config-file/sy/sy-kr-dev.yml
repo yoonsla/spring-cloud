@@ -1,4 +1,4 @@
 com:
   sy:
-    profile: stg
+    profile: dev
     region: kr
