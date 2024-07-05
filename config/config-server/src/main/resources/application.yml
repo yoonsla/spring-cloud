@@ -10,3 +10,4 @@ spring:
           uri: https://github.com/yoonsla/spring-cloud
           search-paths: config/config-file/**
           default-label: main
+          basedir: ./repo

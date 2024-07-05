@@ -219,7 +219,7 @@ public class ConfigController {
 
 가장 심플한 방법이다.\
 클라이언트에 spring-boot-actuator 의존성을 추가하고 ``POST`` 로 ``/actuator/refresh`` 요청을 보낸다.\
-그러면 actuator 가 설정 정보를 다시 읽고 값을 refresh 한다.\
+그러면 actuator 가 설정 정보를 다시 읽고 값을 refresh 한다.
 
 간단한 방법이지만 운영 중인 서버가 여러대라면 상당히 번거로워질 수 있다.\
 특히나 Spring Cloud Eureka 와 같이 서비스 디스커버리 기술을 사용하고 있지 않다면 더더욱 적용이 어려워진다.
@@ -234,10 +234,42 @@ Spring Cloud bus 는 서비스 노드를 연결해 설정 정보 등의 변경�
 ### Watcher 를 통해 Spring Cloud Sever 에 변경 여부를 확인하기
 
 Watcher 는 설정 서버에 변경 여부를 지속적으로 물어보고 확인하는 컴포넌트이다.\
-일반적으로 설정 서버는 별다른 일을 하지 않도록 분리되어 있어 요청에 대한 부담이 적다.\
+일반적으로 설정 서버는 별다른 일을 하지 않도록 분리되어 있어 요청에 대한 부담이 적다.
 
 하지만 Git으로 설정 파일을 관리하는 경우, Spring Cloud Config에서 제공하는 Watcher로는 변경 감지가 불가하다.\
 설정 서버는 설정 클라이언트에게 state 와 version 을 내려주는데, Git은 version 이 git HEAD 의 checksum 에 해당한다.\
 하지만 Spring Cloud Config 가 구현해둔 ConfigCloudWatcher 는 state 의 변경 여부만 검사하기 때문에, Git은 변경 여부 탐지가 불가하다.
 
 이는 ConfigWatcher 를 참고해 version 의 수정 여부를 검사하는 구현체를 만들어 해결할 수 있다.
+
+---
+
+## Spring Cloud Config 사용 시 주의사항
+
+![img_3.png](img_3.png)
+
+스프링 클라우드 공식 문서에서는 이와 같은 내용을 Warning으로 다루고 있다.\
+OS에 따라 주기적으로 임시 디렉토리가 삭제될 수 있으니 ``basedir``을 설정하라는 내용이다.
+
+즉, 설정 파일을 클론 받을 위치를 직접 지정해서 임시 디렉토리에 받으면 안된다는 것이다.
+
+---
+
+application.yml
+```
+server:
+  port: 8888
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/yoonsla/spring-cloud
+          search-paths: config/config-file/**
+          default-label: main
+          basedir: ./repo
+```
+
+위와 같이 Config Server의 설정 파일에서 basedir 설정을 해야한다.
