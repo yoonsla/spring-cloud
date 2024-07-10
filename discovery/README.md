@@ -9,6 +9,30 @@ Service Client가 서비스를 호출 할 때, 서비스의 위치 (IP, PORT 등
 
 스프링 클라우드는 Netflix OSS의 Eureka, Apache ZooKeeper, Consul 등 다양한 서비스 디스커버리 툴과 통합되어있다.
 
+서비스 디스커버리는 구성하는 방법에 따라 Client side, Server side discovery로 나뉜다.\
+
+### Client side Discovery
+
+서비스 클라이언트가 Service Registry 를 직접 호출하여 서비스 위치를 찾은 뒤에 로드밸런싱 알고리즘을 통해 서비스를 호출한다.
+
+![img_1.png](img_1.png)
+
+대표적으로 Netflix의 Eureka / Apach의 Zookeeper 가 있다.
+
+이 방식은 비교적 간단하며, 서비스 별로 로드밸런싱 로직을 구성할 수 있다는 장점이 있지만\
+서비스와 Service Registry 간 직접적인 종속성이 생기며 서비스마다 각기 다른 언어를 사용한다면 각 언어별로 서비스 검색 로직을 구현해야 하는 단점이 있다.
+
+### Server side Discovery
+
+서비스 클라이언트가 Service Registry 를 호출하지 않고 Platform router 혹은 로드밸런서를 호출한다.\
+이 때 요청 받든 로드밸런서는 Service Registry 를 호출하여 서비스의 위치를 알아내고 이를 기반으로 로드밸런싱된 호출을 진행한다.
+
+![img_2.png](img_2.png)
+
+이 방식은 서비스 클라이언트가 직접 서비스 검색 로직을 구현할 필요가 없기 때문에\
+서비스 - Service Registry 간 종속성을 제거할 수 있다는 장점이 있다.\
+반면에 로드밸런서는 고가치 장비가 추가로 필요하게 된다는 단점이 존재한다.
+
 ---
 
 ## Eureka는 무엇인가?
