@@ -1,4 +1,4 @@
-package com.example.feign;
+package com.sy.feign;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
