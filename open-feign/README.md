@@ -24,11 +24,11 @@ Open Feign의 초기 모델인 Feign은 Netflix에 의해 만들고 공개되었
 public interface OpenFeign {
 
     @GetMapping
-    ExchangeRateResponse call(
-            @RequestHeader String apiKey,
-            @RequestParam Currency source,
-            @RequestParam Currency currencies);
-
+    void call(
+        @RequestHeader String apiKey,
+        @RequestParam Currency source,
+        @RequestParam Currency currencies
+    );
 }
 ```
 - Spring MVC 어노테이션으로 개발 할 수 있어 진입장벽이 높지 않다.

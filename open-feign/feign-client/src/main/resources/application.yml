@@ -1,0 +1,14 @@
+server:
+  port: 8778
+
+spring:
+  application:
+    name: client-service
+
+feign:
+  client:
+    config:
+      default:
+        connectionTimeout: 1000
+        readTimeout: 3000
+        loggerLevel: FULL
