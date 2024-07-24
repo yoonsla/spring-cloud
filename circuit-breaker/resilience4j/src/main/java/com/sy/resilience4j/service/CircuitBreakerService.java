@@ -1,8 +1,10 @@
 package com.sy.resilience4j.service;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class CircuitBreakerService {
 
@@ -15,6 +17,7 @@ public class CircuitBreakerService {
     }
 
     private String fallbackCatImage(Long id, Throwable throwable) {
+        throwable.printStackTrace();
         return "fallback cat image.png";
     }
 }

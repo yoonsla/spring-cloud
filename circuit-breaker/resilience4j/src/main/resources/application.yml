@@ -7,21 +7,26 @@ spring:
 
 resilience4j:
   circuitbreaker:
+    instances:
+      cat-image-circuit-breaker: # Circuit Breaker 이름 맞추기
+        baseConfig: default
     configs:
       default: # 최근 10회 요청 중 50% (5회) 이상 요청 실패시 OPEN 상태로 전환된다.
         slidingWindowType: COUNT_BASED
         slidingWindowSize: 10
         failureRateThreshold: 50
         permittedNumberOfCallsInHalfOpenState: 5
+        waitDurationInOpenState: 10s # 10초 후 Half-Open 상태로 전환
         registerHealthIndicator: true
 
+# actuator
 management:
   endpoints:
     web:
       exposure:
         include:
-          - "*" # ???? ?? actuator ?? ??
+          - "*"
 
   health:
     circuitbreakers:
-      enabled: true # circuitbreakers ?? ??
+      enabled: true
