@@ -1,0 +1,27 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: circuit-breaker-service
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default: # 최근 10회 요청 중 50% (5회) 이상 요청 실패시 OPEN 상태로 전환된다.
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        permittedNumberOfCallsInHalfOpenState: 5
+        registerHealthIndicator: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*" # ???? ?? actuator ?? ??
+
+  health:
+    circuitbreakers:
+      enabled: true # circuitbreakers ?? ??
