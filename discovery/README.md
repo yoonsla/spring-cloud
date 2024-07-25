@@ -1,4 +1,4 @@
-# Spring Cloud 01
+# Spring Discovery
 
 ---
 
